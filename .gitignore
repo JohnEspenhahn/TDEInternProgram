@@ -1,5 +1,6 @@
 .metadata/
 .recommenders/
-JDBCDemo/.settings/
-JDBCDemo/target/
-JDBCDemo/.classpath
+target/
+bin/
+.settings/
+.classpath

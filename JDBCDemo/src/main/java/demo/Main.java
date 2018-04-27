@@ -17,7 +17,7 @@ public class Main implements CommandLineRunner {
 	private InvoiceRepository invoiceRepository;
 
 	public static void main(String[] args) {
-		SpringApplication.run(Main.class, args);
+		SpringApplication.run(Main.class, args).close();
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package demo;
+package main.java.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -6,8 +6,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
 
-import demo.models.Invoice;
-import demo.repositories.InvoiceRepository;
+import main.java.demo.models.Invoice;
+import main.java.demo.repositories.InvoiceRepository;
 
 @ImportResource({"classpath:applicationContext.xml"})
 @SpringBootApplication
@@ -23,7 +23,12 @@ public class Main implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		System.out.println("PostConstruct");
+		System.out.println("Full List:");
 		for (Invoice i : invoiceRepository.findAll()) {
+			System.out.println(i.toString());
+		}
+		System.out.println("Searching by Carrier 'test':");
+		for (Invoice i : invoiceRepository.findByCarrier("test")) {
 			System.out.println(i.toString());
 		}
 	}

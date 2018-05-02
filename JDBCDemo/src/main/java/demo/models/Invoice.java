@@ -1,4 +1,4 @@
-package demo.models;
+package main.java.demo.models;
 
 import java.lang.reflect.Field;
 

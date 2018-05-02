@@ -1,4 +1,4 @@
-package demo.repositories;
+package main.java.demo.repositories;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import javax.persistence.PersistenceUnit;
 
 import org.springframework.stereotype.Repository;
 
-import demo.models.Invoice;
+import main.java.demo.models.Invoice;
 
 @Repository
 public class InvoiceRepositoryImpl implements InvoiceRepository {
@@ -93,6 +93,23 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 			t.begin();
 			try {
 				l = entityManager.createQuery("SELECT invoice FROM Invoice invoice WHERE invoice.client =:client").setParameter("client", client).getResultList();
+			} finally {
+				t.commit();
+			}
+		} finally {
+			entityManager.close();
+		}
+		return l;
+	}
+	@SuppressWarnings("unchecked")
+	public List<Invoice> findByCarrier(String carrier) {
+		EntityManager entityManager = getEntityManager();
+		List<Invoice> l = null;
+		try {
+			EntityTransaction t = entityManager.getTransaction();
+			t.begin();
+			try {
+				l = entityManager.createQuery("SELECT invoice FROM Invoice invoice WHERE invoice.carrier =:carrier").setParameter("carrier", carrier).getResultList();
 			} finally {
 				t.commit();
 			}

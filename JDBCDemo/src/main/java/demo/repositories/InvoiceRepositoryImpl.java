@@ -1,5 +1,6 @@
 package demo.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -26,17 +27,27 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 	public void init() {
 		System.out.println("InvoiceRepository constructed");
 	}
+	
+	@Override
+	public List<Invoice> findAll() {
+		return findAll(0, 100);
+	}
 
+	/**
+	 * @param page Page offset in the results
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Invoice> findAll() {
+	public List<Invoice> findAll(int page, int page_size) {
+		if (page < 0 || page_size <= 0) return new ArrayList<Invoice>();
+		
 		EntityManager entityManager = getEntityManager();
 		List<Invoice> l = null;
 		try {
 			EntityTransaction t = entityManager.getTransaction();
 			t.begin();
 			try {
-				l = entityManager.createQuery("SELECT invoice FROM Invoice invoice ORDER BY invoice.fbnumber").setMaxResults(100).getResultList();
+				l = entityManager.createQuery("SELECT invoice FROM Invoice invoice ORDER BY invoice.fbnumber").setFirstResult(page*page_size).setMaxResults(page_size).getResultList();
 			} finally {
 				t.commit();
 			}

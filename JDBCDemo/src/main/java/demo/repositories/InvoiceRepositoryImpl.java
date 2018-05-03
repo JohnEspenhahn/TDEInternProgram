@@ -1,5 +1,6 @@
-package main.java.demo.repositories;
+package demo.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -10,7 +11,7 @@ import javax.persistence.PersistenceUnit;
 
 import org.springframework.stereotype.Repository;
 
-import main.java.demo.models.Invoice;
+import demo.models.Invoice;
 
 @Repository
 public class InvoiceRepositoryImpl implements InvoiceRepository {
@@ -26,17 +27,27 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 	public void init() {
 		System.out.println("InvoiceRepository constructed");
 	}
+	
+	@Override
+	public List<Invoice> findAll() {
+		return findAll(0, 100);
+	}
 
+	/**
+	 * @param page Page offset in the results
+	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Invoice> findAll() {
+	public List<Invoice> findAll(int page, int page_size) {
+		if (page < 0 || page_size <= 0) return new ArrayList<Invoice>();
+		
 		EntityManager entityManager = getEntityManager();
 		List<Invoice> l = null;
 		try {
 			EntityTransaction t = entityManager.getTransaction();
 			t.begin();
 			try {
-				l = entityManager.createQuery("SELECT invoice FROM Invoice invoice ORDER BY invoice.fbnumber").setMaxResults(100).getResultList();
+				l = entityManager.createQuery("SELECT invoice FROM Invoice invoice ORDER BY invoice.fbnumber").setFirstResult(page*page_size).setMaxResults(page_size).getResultList();
 			} finally {
 				t.commit();
 			}
@@ -93,23 +104,6 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 			t.begin();
 			try {
 				l = entityManager.createQuery("SELECT invoice FROM Invoice invoice WHERE invoice.client =:client").setParameter("client", client).getResultList();
-			} finally {
-				t.commit();
-			}
-		} finally {
-			entityManager.close();
-		}
-		return l;
-	}
-	@SuppressWarnings("unchecked")
-	public List<Invoice> findByCarrier(String carrier) {
-		EntityManager entityManager = getEntityManager();
-		List<Invoice> l = null;
-		try {
-			EntityTransaction t = entityManager.getTransaction();
-			t.begin();
-			try {
-				l = entityManager.createQuery("SELECT invoice FROM Invoice invoice WHERE invoice.carrier =:carrier").setParameter("carrier", carrier).getResultList();
 			} finally {
 				t.commit();
 			}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<!-- References common fragment header(title) defined in fragments/header.html -->
+<head th:replace="fragments/header :: header('Invoice Edit')"></head>
+<body>
+	<div class="container">
+		<h3>Invoice</h3>
+		<small><a href="/invoiceList">Back to List</a></small>
+		<div class="row">
+			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+				<div class="form-group">
+					<!-- Creates dropdown populated by `client` list -->
+					<label for="client">Client</label>	
+					<select id="client" name="client" class="form-control" >
+						<option th:value="null">--Select Client--</option>
+						<option th:each="client:${clients}" th:value="${client.client}" th:text="${client.name}" th:selected="${inv.client == client.client}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+				<div class="form-group">
+					<!-- Creates dropdown populated by `carriers` list -->
+					<label for="carrier">Carrier</label>
+					<select id="carrier" name="carrier" class="form-control" >
+						<option th:value="null">--Select Carrier--</option>
+						<option th:each="carrier:${carriers}" th:value="${carrier.carrier}" th:text="${carrier.name}" th:selected="${inv.carrier == carrier.carrier}"></option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<!-- References common "fragment" rowInput(...) defined in file fragments/rowInput.html -->
+			<div th:replace="fragments/rowInput :: rowInput('number', 'Price', 'totbill'    , ${inv.totbill})"></div>
+			<div th:replace="fragments/rowInput :: rowInput('text'  , 'From' , 'companyFrom', ${inv.companyfrom})"></div>
+		</div>
+	</div>
+</body>
+</html>

@@ -112,6 +112,25 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 		}
 		return l;
 	}
+	
+	@Override
+    @SuppressWarnings("unchecked")
+    public List<Invoice> findByCarrier(String carrier) {
+        EntityManager entityManager = getEntityManager();
+        List<Invoice> l = null;
+        try {
+            EntityTransaction t = entityManager.getTransaction();
+            t.begin();
+            try {
+                l = entityManager.createQuery("SELECT invoice FROM Invoice invoice WHERE invoice.carrier =:carrier").setParameter("carrier", carrier).getResultList();
+            } finally {
+                t.commit();
+            }
+        } finally {
+            entityManager.close();
+        }
+        return l;
+    }
 
 	@Override
 	public Boolean save(Invoice invoice) {

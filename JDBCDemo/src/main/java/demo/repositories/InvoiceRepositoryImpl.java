@@ -39,8 +39,10 @@ public class InvoiceRepositoryImpl implements InvoiceRepository {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Invoice> findAll(int page, int page_size) {
+		// Validate input
 		if (page < 0 || page_size <= 0) return new ArrayList<Invoice>();
 		
+		// Safely run query
 		EntityManager entityManager = getEntityManager();
 		List<Invoice> l = null;
 		try {

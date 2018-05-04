@@ -1,0 +1,4 @@
+<div th:fragment="rowInput(type,title,variable,default_value)" class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+	<label th:text="${title}"></label>
+	<input th:type="${type}" th:name="${variable}" th:value="${default_value}" class="form-control" />
+</div>

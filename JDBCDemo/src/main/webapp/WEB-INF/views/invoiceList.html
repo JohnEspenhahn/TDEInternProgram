@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<!-- See fragments/header.html -->
+<head th:replace="fragments/header :: header('Invoice List')"></head>
+<body>
+	<div class="container">
+		<div class="row">
+			<h3>Invoices</h3>
+		</div>
+		
+		<table class="table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Price</th>
+				<th>Carrier</th>
+				<th>Client</th>
+				<th>From</th>
+				<th>Edit</th>
+			</tr>
+		</thead>
+		<tbody th:object="${invoices}">
+			<!-- invoices is of type List<demo.models.Invoice> from demo.controllers.InvoiceController -->
+			<!-- All the "th:..." things mean the server should evaluate before returning the raw html to the client -->
+			<tr th:each="inv:${invoices}">
+				<td th:text="${inv.fbnumber}"></td>
+				<td th:text="${inv.totbill}"></td>
+				<td th:text="${inv.carrier}"></td>
+				<td th:text="${inv.client}"></td>
+				<td th:text="${inv.companyfrom}"></td>
+				<td> <!-- Edit -->
+					<a class="btn" th:href="@{/invoiceEdit(fbnumber=${inv.fbnumber})}">Edit</a>
+				</td>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<!-- Navigation, all the ${...} are evaluated by the server before returning to the client -->
+				<td colspan="5">
+					<a class="btn" th:if="${page} > 0" th:href="@{/invoiceList(page=${page-1})}">Prev</a>
+					<a class="btn" th:if="${invoices.size()} == ${page_size}" th:href="@{/invoiceList(page=${page+1})}">Next</a>
+				</td>
+				<td>
+					<a class="btn btn-primary" href="/invoiceEdit">New</a>
+				</td>
+			</tr>
+		</tfoot>
+		</table>
+	</div>
+</body>
+</html>

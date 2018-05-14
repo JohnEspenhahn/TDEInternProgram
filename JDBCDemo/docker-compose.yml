@@ -1,0 +1,33 @@
+version: "3"
+volumes:
+  db_data: {}
+
+services:
+  database:
+    container_name: jdbcdemo_database
+    image: mysql/mysql-server:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      # scripts to initialize database
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/1_schema.sql:ro
+      - ./sql/data.sql:/docker-entrypoint-initdb.d/2_data.sql:ro
+      - ./sql/user.sql:/docker-entrypoint-initdb.d/3_user.sql:ro
+      # volume where data is persisted
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: takenny_freight
+      MYSQL_ROOT_PASSWORD: root
+
+  server:
+    container_name: jdbcdemo_server
+    image: jdbcdemo_server:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" # http
+      - "8000:8000" # debugging
+    links:
+      # allow communication with database
+      - database

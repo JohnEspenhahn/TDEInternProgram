@@ -8,8 +8,9 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- Load system properties into context -->
-	<context:property-placeholder location="application.properties"
-		system-properties-mode="OVERRIDE" />
+	<context:property-placeholder 
+    location="/WEB-INF/spring/application.properties,/WEB-INF/spring/data-access.properties"
+		system-properties-mode="OVERRIDE" ignore-unresolvable="true" />
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"

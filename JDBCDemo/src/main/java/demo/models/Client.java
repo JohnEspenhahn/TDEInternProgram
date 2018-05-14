@@ -93,4 +93,5 @@ public class Client {
 	public String getZipcode() {
 		return this.zipcode;
 	}
+	
 }

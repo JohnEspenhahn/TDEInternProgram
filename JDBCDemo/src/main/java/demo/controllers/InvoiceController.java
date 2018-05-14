@@ -1,6 +1,5 @@
 package demo.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +16,7 @@ import demo.models.Client;
 import demo.models.Invoice;
 import demo.repositories.ClientRepository;
 import demo.repositories.InvoiceRepository;
+import demo.repositories.CarrierRepository;
 
 @Controller
 public class InvoiceController {
@@ -27,13 +27,23 @@ public class InvoiceController {
 	
 	@Autowired
 	private ClientRepository clientRepository;
+	
+	@Autowired
+	private CarrierRepository carrierRepository;
 
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String home() {
+		return "redirect:invoiceList";
+	}
+	
 	@RequestMapping(value = "/invoiceList", method = RequestMethod.GET)
 	public String invoiceList(
 			@RequestParam(value = "page", required = false, defaultValue = "0") Integer page, 
 			ModelMap model) 
 	{
 		int page_size = 3;
+		
+
 		
 		// `model` is a collection of variable_name -> variable_values
 		// we can reference `variable_name` in the view (see invoiceList.html)
@@ -62,10 +72,11 @@ public class InvoiceController {
 			inv = new Invoice();
 		}
 		
-		// TODO load the carriers/clients
-		List<Carrier> carriers = new ArrayList<>(); // TODO create CarrierRepository and change this
-		List<Client> clients = clientRepository.getAll(); // TODO implement this in ClientRepositoryImpl
-		// Hint: don't forget to add carrierRepository variable to top of this class (like clientRepository is defined)
+		//load the carriers/clients
+		List<Carrier> carriers = carrierRepository.getAll();
+		List<Client> clients = clientRepository.getAll();
+		
+		
 		
 		// Add to let view see the variable
 		model.addAttribute("inv", inv);

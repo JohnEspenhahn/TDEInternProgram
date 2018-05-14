@@ -31,6 +31,11 @@ public class InvoiceController {
 	@Autowired
 	private CarrierRepository carrierRepository;
 
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String home() {
+		return "redirect:invoiceList";
+	}
+	
 	@RequestMapping(value = "/invoiceList", method = RequestMethod.GET)
 	public String invoiceList(
 			@RequestParam(value = "page", required = false, defaultValue = "0") Integer page, 
